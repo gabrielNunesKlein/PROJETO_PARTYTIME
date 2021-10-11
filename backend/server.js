@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 // routes
+const authRoutes = require("./routes/authRoutes");
 
 // middlewares
 
@@ -27,6 +28,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
+
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
     res.json({ message: "Rota teste"});
