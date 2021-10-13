@@ -3,8 +3,11 @@ const bcrypt = require("bcrypt");
 
 const User = require("../models/user");
 
+// Module para verificar o tokken
+const verifyToken = require("../helpers/check-token");
+
 // GET por id
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
     const id = req.params.id;
 
     try{
