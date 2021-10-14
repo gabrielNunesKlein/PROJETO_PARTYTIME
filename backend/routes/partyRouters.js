@@ -160,4 +160,59 @@ router.delete("/", verifyToken, async (req, res) => {
     }
 });
 
+// Atualização de festa
+router.put("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res) => {
+
+    const title = req.body.title;
+    const description = req.body.description;
+    const partyDate = req.body.party_date;
+    const partyId = req.body.id;
+    const partyUserId = req.body.user_id;
+
+    let files = [];
+
+    if(req.files) {
+      files = req.files.photos;
+    }
+    
+    if(title == "null" || description == "null", partyDate == "null"){
+        res.status(400).json({error: "Preencha pelo menos nome, descrição e data."});
+    }
+
+    const token = req.header("auth-token");
+
+    const userByToken = await getUserByToken(token);
+
+    const userId = userByToken._id.toString();
+
+    if(userId != partyUserId){
+        res.status(400).json({error: "Acesso negado !"});
+    }
+
+    const party = {
+        title: title,
+        description: description,
+        partyDate: partyDate,
+        privacy: req.body.privacy,
+        userId: userId
+    }
+
+    let photos = [];
+
+    if(files && files.length > 0){
+        files.forEach((photo, i) => {
+            photos[i] = photo.path;
+        });
+        party.photos = photos; 
+    }
+
+    try{
+        const updateParty = await Party.findByIdAndUpdate({ _id: partyId, userId: userId }, { $set: party });
+        res.json({error: null, msg: updateParty})
+    } catch(err){
+        res.status(400).json({ error })
+    }
+
+});
+
 module.exports = router;
