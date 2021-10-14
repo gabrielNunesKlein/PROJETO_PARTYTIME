@@ -144,4 +144,20 @@ router.get("/:id", async function(req, res){
     }
 })
 
+// delete party
+router.delete("/", verifyToken, async (req, res) => {
+
+    try{
+        const token = req.header("auth-token");
+        const user = await getUserByToken(token);
+        const userId = user._id.toString();
+        const idParty = req.body.id;
+
+        await Party.deleteOne({ _id: idParty, userId: userId });
+        res.json({ error: null, msg: "Evento removido com sucesso" });
+    } catch(err){
+        res.status(400).json({ error: "Acesso negado !" });
+    }
+});
+
 module.exports = router;
