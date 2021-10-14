@@ -7,6 +7,7 @@ const cors = require('cors');
 // routes
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const partyRoutes = require("./routes/partyRouters");
 
 // middlewares
 
@@ -32,6 +33,7 @@ app.use(express.static("public"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/party", partyRoutes);
 
 app.get("/", (req, res) => {
     res.json({ message: "Rota teste"});
