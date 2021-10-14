@@ -12,6 +12,8 @@ const verifyToken = require("../helpers/check-token");
 
 const getUserByToken = require("../helpers/get-user-by-token");
 
+
+// Cadastro de Party
 router.post("/", verifyToken, upload.fields([{names: "photos"}]), async (req, res) => {
     
     const title = req.body.title;
@@ -67,5 +69,79 @@ router.post("/", verifyToken, upload.fields([{names: "photos"}]), async (req, re
     }
 
 });
+
+// Retornando todas as festas
+router.get("/all", async (req, res) => {
+
+    try{
+        const parties = await Party.find({privacy: false}).sort([[ '_id', -1 ]]);
+        res.json({eror: null, parties: parties});
+    } catch(err){
+        return res.status(400).json({ error });
+    }
+});
+
+// Todas as Festas do usuário
+router.get("/userparties", verifyToken, async (req, res) => {
+
+    try{
+        const token = req.header("auth-token");
+
+        const user = await getUserByToken(token);
+
+        const userId = user._id.toString();
+
+        const parties = await Party.find({ userId: userId });
+        res.json({error: null, parties: parties});
+    } catch(error){
+        return res.status(400).json({ error });
+    }
+});
+
+// Retornando todas as festas do usuário
+router.get("/userparty/:id", verifyToken, async function(req, res){
+
+    try{
+        const token = req.header("auth-token");
+
+        const user = await getUserByToken(token);
+    
+        const userId = user._id.toString();
+    
+        const partyId = req.params.id;
+    
+        const party = await Party.findOne({ _id: partyId, userId: userId });
+        res.json({error: null, party: party });
+    }
+    catch(err){
+        return res.status(400).json({ error });
+    }
+});
+
+// Festas por id (publicas ou privadas)
+router.get("/:id", async function(req, res){
+    try{
+        const id = req.params.id;
+
+        const party = await Party.findOne({ _id: id});
+
+        if(party.privacy === false){
+            res.status(400).json({ error: null, party: party });
+        } else{
+            const token = req.header("auth-token");
+
+            const user = await getUserByToken(token);
+        
+            const userId = user._id.toString();
+            const partyUserId = party.userId.toString();
+            
+            if(userId == partyUserId){
+                res.status(400).json({ error: null, party: party });
+            }
+        }
+    } catch(err){
+        return res.status(400).json({ error: "Este evento não existe !" });
+    }
+})
 
 module.exports = router;
