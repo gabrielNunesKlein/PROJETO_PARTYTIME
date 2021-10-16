@@ -47,7 +47,7 @@ router.post("/register", async (req, res) => {
             "nossosecret"
         );
 
-        res.json({error: null, msg: "Você realizou o cadastro com sucesso", token: token, userId: newUse._id});
+        res.json({error: null, msg: "Você realizou o cadastro com sucesso", token: token, userId: newUser._id});
 
     } catch(error){
         res.status(400).json({error});

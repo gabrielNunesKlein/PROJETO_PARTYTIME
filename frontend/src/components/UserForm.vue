@@ -16,7 +16,7 @@
             </div>
             <div class="input-container">
                 <label for="confirmPassword">Confirme sua senha:</label>
-                <input type="confirmPassword" id="confirmPassword" name="confirmPassword" v-model="confirmPassword" placeholder="Confirme sua senha">
+                <input type="password" id="confirmPassword" name="confirmPassword" v-model="confirmPassword" placeholder="Confirme sua senha">
             </div>
             <InputSubmit :text="btnText" />
         </form>
@@ -49,7 +49,47 @@ export default {
         async register(e){
             e.preventDefault();
 
-            console.log("Funcionou !");
+            const data = {
+                name: this.name,
+                email: this.email,
+                password: this.password,
+                confirmPassword: this.confirmPassword
+            }
+
+            const jsonData = JSON.stringify(data);
+
+            await fetch("http://localhost:3000/api/auth/register", {
+                method: "POST",
+                headers: {"Content-type": "application/json"},
+                body: jsonData
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+                let auth = false;
+
+                if(data.error){
+                    this.msg = data.error;
+                    this.msgClass = "error"
+                } else {
+
+                    auth = true;
+                    this.msg = data.msg;
+                    this.msgClass = "sucess"
+
+
+                }
+
+                setTimeout(() => {
+                    if(!auth){
+                        this.msg = null;
+                    } else{
+                        this.$router.push("dashboard");
+                    }
+                }, 2000)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
         }
     }
 }
