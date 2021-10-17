@@ -6,16 +6,37 @@
     <h2 id="nav-title">Paty Time</h2>
     <div id="nav-links">
         <router-link to="/">Home</router-link>
-        <router-link to="/about">Entrar</router-link>
-        <router-link to="/register">Cadastrar</router-link>
+        <router-link to="/login" v-show="!authenticated">Entrar</router-link>
+        <router-link to="/register" v-show="!authenticated">Cadastrar</router-link>
+        <router-link to="/dashboard" v-show="authenticated">Dashboard</router-link>
+        <router-link to="/proofile" v-show="authenticated">Configuraçãoes</router-link>
+        <button @click="logout($event)" v-show="authenticated">Logout</button>
     </div>
 </div>
 </template>
 
 <script>
 
+import { mapState } from 'vuex';
+
 export default {
-    name: "NavBar"
+
+    name: "NavBar",
+    methods: {
+        logout(e){
+
+            e.preventDefault();
+
+            this.$store.commit("logout");
+
+            this.$router.push("/");
+        }
+    },
+    computed: {
+        ...mapState([
+            'authenticated'
+        ])
+    }
 }
 </script>
 
@@ -59,7 +80,7 @@ export default {
         cursor: pointer;
     }
 
-    bottom:hover{
+    button:hover, #nav a:hover{
         color: #C1B696;
     }
 </style>

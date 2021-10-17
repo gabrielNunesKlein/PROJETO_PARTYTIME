@@ -77,13 +77,15 @@ export default {
                     this.msgClass = "sucess"
 
 
+                    this.$store.commit("authenticated", { token: data.token, userId: data.userId })
+
                 }
 
                 setTimeout(() => {
                     if(!auth){
                         this.msg = null;
                     } else{
-                        this.$router.push("dashboard");
+                        this.$router.push('dashboard');
                     }
                 }, 2000)
             })

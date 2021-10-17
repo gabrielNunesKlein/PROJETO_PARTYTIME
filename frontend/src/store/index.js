@@ -17,7 +17,7 @@ export default createStore({
     authenticated(state, data){
       state.authenticated = true
       state.token = data.token
-      state.userId = date.userId
+      state.userId = data.userId
     },
     logout(state){
       state.authenticated = false
@@ -32,5 +32,5 @@ export default createStore({
     token: state => state.token,
     userId: state => state.userId
   },
-  modules: [vuexLocal.plugin]
+  plugins: [vuexLocal.plugin]
 })
