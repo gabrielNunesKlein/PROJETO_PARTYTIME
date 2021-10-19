@@ -22,7 +22,7 @@ router.get("/:id", verifyToken, async (req, res) => {
 });
 
 // PUT
-router.put("/", verifyToken, async (req, res) => {
+router.patch("/", verifyToken, async (req, res) => {
     const token = req.header("auth-token");
     const user = await getUserByToken(token);
     const userReqId = req.body.id;
@@ -54,7 +54,7 @@ router.put("/", verifyToken, async (req, res) => {
 
     try{
         const updatedUser = await User.findOneAndUpdate({ _id: userId}, {$set: updateData }, {new: true});
-        res.json({ error: null, msg: updatedUser});
+        res.json({ error: null, msg: "Usuário atualizado com sucesso", user: updatedUser});
 
     } catch(err){
         res.status(401).json({ error });

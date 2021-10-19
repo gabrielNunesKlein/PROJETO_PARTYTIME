@@ -9,7 +9,7 @@
         <router-link to="/login" v-show="!authenticated">Entrar</router-link>
         <router-link to="/register" v-show="!authenticated">Cadastrar</router-link>
         <router-link to="/dashboard" v-show="authenticated">Dashboard</router-link>
-        <router-link to="/proofile" v-show="authenticated">Configuraçãoes</router-link>
+        <router-link to="/profile" v-show="authenticated">Configuraçãoes</router-link>
         <button @click="logout($event)" v-show="authenticated">Logout</button>
     </div>
 </div>
