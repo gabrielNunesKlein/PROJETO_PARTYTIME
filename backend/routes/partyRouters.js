@@ -14,8 +14,8 @@ const getUserByToken = require("../helpers/get-user-by-token");
 
 
 // Cadastro de Party
-router.post("/", verifyToken, upload.fields([{names: "photos"}]), async (req, res) => {
-    
+router.post("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res) => {
+        
     const title = req.body.title;
     const description = req.body.description;
     const partyDate = req.body.party_date;
