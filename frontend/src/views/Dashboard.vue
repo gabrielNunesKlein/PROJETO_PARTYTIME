@@ -6,6 +6,7 @@
         </div>
         <div v-if="parties.length > 0">
             <h1>Tabela de festas</h1>
+            <DataTable :parties="parties" />
         </div>
         <div v-else>
             <p>Você ainda não tem festas cadastradas, <router-link to="/newparty">Clique aqui para cadastrar</router-link></p>
@@ -14,12 +15,18 @@
 </template>
 
 <script>
+
+import DataTable from '../components/DataTable.vue';
+
 export default {
     name: "Dashboard",
     data(){
         return {
             parties: []
         }
+    },
+    components: { 
+        DataTable
     },
     created(){
       this.getParties();  
