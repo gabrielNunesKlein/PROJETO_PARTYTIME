@@ -13,11 +13,11 @@
                 </div>
 
                 <div class="data-title-container">
-                    {{ party.title }}
+                    <router-link :to="`/party/${party._id}`">{{ party.title }}</router-link>
                 </div>
 
                 <div class="data-actions-container">
-                    <router-link :to="`party/${party._id}`" class="edit-btn">Editar</router-link>
+                    <router-link :to="`/editparty/${party._id}`" class="edit-btn">Editar</router-link>
                     <button class="remove-btn" @click="remover(party._id)">Remover</button>
                 </div>
             </div>

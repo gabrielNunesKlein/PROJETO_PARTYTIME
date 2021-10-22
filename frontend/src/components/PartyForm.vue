@@ -120,6 +120,50 @@ export default {
 
         async updateParty(e){
             e.preventDefault();
+
+            const formDate = new FormData();
+
+            formDate.append('id', this.id);
+            formDate.append('title', this.title);
+            formDate.append('description', this.description);
+            formDate.append('party_date', this.party_date);
+            formDate.append('privacy', this.privacy);
+            formDate.append('user_id', this.user_id);
+
+        if(this.photos.length > 0) {
+            for (const i of Object.keys(this.photos)) {
+                formDate.append('photos', this.photos[i])
+            }
+        }
+
+            const token = this.$store.getters.token;
+
+            await fetch("http://localhost:3000/api/party", {
+                method: "PATCH",
+                headers: {"auth-token": token},
+                body: formDate
+            })
+            .then((resp) => resp.json())
+            .then((data) => {
+
+                console.log(data.party)
+                if(data.error){
+                    this.msg = data.error;
+                    this.msgClass = "error"
+                } else {
+                    this.msg = data.msg;
+                    this.msgClass = "sucess";
+                }
+                
+                setTimeout(() => {
+                    this.msg = null;
+
+            }, 2000)
+            
+            })
+            .catch((error) => {
+                console.log(error);
+            })
         }
     }
 }

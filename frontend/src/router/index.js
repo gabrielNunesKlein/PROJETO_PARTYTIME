@@ -61,6 +61,14 @@ const routes = [
     meta: { 
       requiresAuth: true
     }
+  },
+  {
+    path: '/editparty/:id',
+    name: 'EditParty',
+    component: () => import('../views/EditParty.vue'),
+    meta: { 
+      requiresAuth: true
+    }
   }
 ]
 

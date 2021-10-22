@@ -161,7 +161,7 @@ router.delete("/", verifyToken, async (req, res) => {
 });
 
 // Atualização de festa
-router.put("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res) => {
+router.patch("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res) => {
 
     const title = req.body.title;
     const description = req.body.description;
@@ -185,16 +185,19 @@ router.put("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res)
 
     const userId = userByToken._id.toString();
 
+    //const user = await Party.findOne({ _id: userId });
+
     if(userId != partyUserId){
         res.status(400).json({error: "Acesso negado !"});
     }
 
     const party = {
+        id: partyId,
         title: title,
         description: description,
         partyDate: partyDate,
         privacy: req.body.privacy,
-        userId: userId
+        userId: partyUserId
     }
 
     let photos = [];
@@ -207,8 +210,8 @@ router.put("/", verifyToken, upload.fields([{name: "photos"}]), async (req, res)
     }
 
     try{
-        const updateParty = await Party.findByIdAndUpdate({ _id: partyId, userId: userId }, { $set: party });
-        res.json({error: null, msg: updateParty})
+        const updateParty = await Party.findByIdAndUpdate({ _id: partyId, userId: partyUserId }, { $set: party });
+        res.json({error: null, msg: "Atualizado com sucesso", data: updateParty})
     } catch(err){
         res.status(400).json({ error })
     }
